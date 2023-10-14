@@ -28,7 +28,7 @@
         }
     }
 
-    public void Shop(Fighter player, NameList namelist)
+    public void Shop(Fighter player, NameLists namelist)
     {
         Console.WriteLine("\nYou enter the Blacksmiths Shop and greet Hephaestus, he shows you his current selection of Weapons and Armour.");
         bool acceptedAnswer = false;
@@ -104,7 +104,7 @@
         }
     }
 
-    public void Arena(Fighter player, List<Fighter> fighters, NameList namelist)
+    public void Arena(Fighter player, List<Fighter> fighters, NameLists namelist)
     {
         fighters.RemoveAll(f => !f.GetAlive());
         fighters.Add(new Fighter());

@@ -1,4 +1,4 @@
-﻿NameList nameList = new();
+﻿NameLists nameList = new();
 Town town = new();
 List<Fighter> fighters = new();
 bool singlePlayer = true;

@@ -1,4 +1,4 @@
-﻿public class NameList
+﻿public class NameLists
 {
     List<string> personNames = new List<string>() {"Bob", "Steve", "Greg", "Flavia", "Quintis", "Tiberius", "Bjornulf", "Glenn"};
     List<string> weaponNames = new List<string>() {"Spatha", "Axe", "Spear", "Dagger", "Hammer", "Gladius", "Trident", "Javelin", "Crossbow", "Greatsword"};
