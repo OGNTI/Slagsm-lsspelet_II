@@ -9,7 +9,7 @@ Random generator = new Random();
 bool acceptedAnswer = false;
 while (!acceptedAnswer)
 {
-    Console.WriteLine("One player or Two players? [1/2]");
+    Console.WriteLine("One player or Two players? [1/2] \n(Singleplayer a lot better than shitty Multiplayer)");
     string input = Console.ReadLine().ToLower();
 
     if (input == "1" || input == "one")
@@ -26,32 +26,52 @@ while (!acceptedAnswer)
 
 if (singlePlayer)
 {
-    Console.WriteLine("What is your fighters name?");
+    Console.WriteLine("What is your name?");
     Fighter player = new();
-    player.Name(Console.ReadLine());
+    player.Name(Console.ReadLine().Trim());
+    player.weapon.name = player.weapon.quality + " " + player.weapon.name;
+    player.isPlayer = true;
     fighters.Add(player);
+    town.AddEnemy(fighters, nameList);
     gaming = true;
-    player.gold = generator.Next(100 + 1);
+    player.gold = generator.Next(10 + 1);
 
     while (gaming)
     {
         Console.Clear();
-        Console.WriteLine($"You are in the Town, You have {player.gold} gold and {player.currentHp}/{player.maxHp} Hp. \nWhat do you wish to do? \nRest at the Inn [1/rest] \nVisit the Blacksmiths Shop [2/shop] \nFight in the Arena [3/fight] \n");
+        if (player.currentHp > player.maxHp)
+        {
+            player.currentHp = player.maxHp;
+        }
+        
+        Console.WriteLine($"You are in the Town, You have {player.gold} gold and {player.currentHp}/{player.maxHp} Hp. \nWhat do you wish to do? \n \nRest at the Inn [1/rest] \nSleep on the street [2/sleep] \nVisit the Blacksmiths Shop [3/shop] \nFight in the Arena [4/fight] \nCheck your Backpack [5/inventory]");
         string userInput = Console.ReadLine().ToLower();
 
         if (userInput == "1" || userInput == "rest")
         {
-            town.Inn(player);
+            town.Inn(player, nameList, fighters);
+            Console.ReadLine();
         }
-        else if (userInput == "2" || userInput == "shop")
+        else if (userInput == "2" || userInput == "sleep")
         {
-            town.Shop(player, nameList);
+            town.Street(player, nameList, fighters);
+            Console.ReadLine();
         }
-        else if (userInput == "3" || userInput == "fight")
+        else if (userInput == "3" || userInput == "shop")
         {
-            town.Arena(player, fighters, nameList);
+            town.Shop(player, nameList, fighters);
+            Console.ReadLine();
         }
-        Console.ReadLine();
+        else if (userInput == "4" || userInput == "fight")
+        {
+            town.Arena(player, nameList, fighters);
+            Console.ReadLine();
+        }
+        else if (userInput == "5" || userInput == "inventory")
+        {
+            player.OpenInventory();
+            Console.ReadLine();
+        }
 
         if (!player.GetAlive())
         {
@@ -111,9 +131,16 @@ else if (!singlePlayer)
             Console.WriteLine($"{player1.name} and {player2.name} both blocked.");
         }
 
-        Console.ReadLine();
+        if (!player1.GetAlive())
+        {
+            Console.WriteLine($"{player1.name} was slain by {player2.name}.");
+        }
+        else if (!player2.GetAlive())
+        {
+            Console.WriteLine($"{player2.name} was slain by {player1.name}.");
+        }
     }
 }
 
-Console.WriteLine("end lol, someone died");
+Console.WriteLine("End.");
 Console.ReadLine();

@@ -6,10 +6,26 @@
     public int currentHp = 100;
     public Weapon weapon = new();
     public bool blocking = false;
+    public bool isPlayer = false;
     bool alive;
+    
 
     public void Name(string nameInput)
     {
+        if (nameInput == "")
+        {
+            bool acceptedAnswer = false;
+            while (!acceptedAnswer)
+            {
+                Console.WriteLine("A name cannot be blank. \nTry again.");
+                nameInput = Console.ReadLine().Trim();
+
+                if (nameInput != "")
+                {
+                    acceptedAnswer = true;
+                }
+            }
+        }
         name = nameInput.ToLower();
         if (name.Length >= 2) //if string has enough characters for command below
         {
@@ -40,6 +56,12 @@
     public void PrintStats()
     {
         blocking = false;
+
+        if (currentHp < 0)
+        {
+            currentHp = 0;
+        }
+
         Console.WriteLine($"{name}: {currentHp}/{maxHp}");
     }
 
@@ -51,6 +73,11 @@
         }
 
         return alive;
+    }
+
+    public void OpenInventory()
+    {
+        Console.WriteLine($"\nYou own: \n{weapon.name}");
     }
 }
 
