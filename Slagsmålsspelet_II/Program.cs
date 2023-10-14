@@ -1,6 +1,8 @@
 ﻿NameList nameList = new();
-bool singlePlayer = true;
+Town town = new();
 List<Fighter> fighters = new();
+bool singlePlayer = true;
+bool gaming;
 Random generator = new Random();
 
 
@@ -28,45 +30,32 @@ if (singlePlayer)
     Fighter player = new();
     player.Name(Console.ReadLine());
     fighters.Add(player);
+    gaming = true;
+    player.gold = generator.Next(100 + 1);
 
-    Fighter enemy1 = new();
-    enemy1.Name(nameList.GetName());
-    fighters.Add(enemy1);
-
-    while (player.GetAlive() && enemy1.GetAlive())
+    while (gaming)
     {
-        Console.WriteLine();
-        foreach (Fighter f in fighters)
-        {
-            f.PrintStats();
-        }
-        Console.WriteLine();
-
-        Console.WriteLine("Attack or Block?\n ");
+        Console.Clear();
+        Console.WriteLine($"You are in the Town, You have {player.gold} gold and {player.currentHp}/{player.maxHp} Hp. \nWhat do you wish to do? \nRest at the Inn [1/rest] \nVisit the Blacksmiths Shop [2/shop] \nFight in the Arena [3/fight] \n");
         string userInput = Console.ReadLine().ToLower();
-        int enemyaction = generator.Next(2);
 
-        if (userInput == "block" || userInput == "b")
+        if (userInput == "1" || userInput == "rest")
         {
-            player.Block();
+            town.Inn(player);
         }
-        if (enemyaction == 1)
+        else if (userInput == "2" || userInput == "shop")
         {
-            enemy1.Block();
+            town.Shop(player, nameList);
         }
+        else if (userInput == "3" || userInput == "fight")
+        {
+            town.Arena(player, fighters, nameList);
+        }
+        Console.ReadLine();
 
-        if (userInput == "attack" || userInput == "a")
+        if (!player.GetAlive())
         {
-            player.Attack(enemy1);
-        }
-        if (enemyaction == 0)
-        {
-            enemy1.Attack(player);
-        }
-
-        if (player.blocking && enemy1.blocking)
-        {
-            Console.WriteLine($"{player.name} and {enemy1.name} both blocked.");
+            gaming = false;
         }
     }
 }
@@ -128,5 +117,3 @@ else if (!singlePlayer)
 
 Console.WriteLine("end lol, someone died");
 Console.ReadLine();
-
-

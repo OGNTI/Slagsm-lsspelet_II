@@ -1,6 +1,7 @@
 ﻿public class Fighter
 {
     public string name = "Errorson";
+    public int gold;
     public int maxHp = 100;
     public int currentHp = 100;
     public Weapon weapon = new();
@@ -44,7 +45,10 @@
 
     public bool GetAlive()
     {
-
+        if (currentHp <= 0)
+        {
+            alive = false;
+        }
 
         return alive;
     }
