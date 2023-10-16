@@ -101,11 +101,17 @@
             while (!acceptedAnswer)
             {
                 Console.WriteLine("What do you wish to buy?");
-                for (int i = 0; i < player.weapon.qualities.Count; i++)
+                Console.WriteLine("Weapons:");
+                for (int i = 0; i < nameList.qualityNames.Count; i++)
                 {
                     buyableWeaponsPrices[i] = generator.Next(buyableWeaponsPrices[i] - buyableWeaponsPricesRange, buyableWeaponsPrices[i] + buyableWeaponsPricesRange + 1);
-                    buyableWeapons.Add(player.weapon.qualities[i] + " " + nameList.GetWeaponName() + $" - [{buyableWeaponsPrices[i]} gold]");
+                    buyableWeapons.Add(nameList.qualityNames[i] + " " + nameList.GetWeaponName() + $" - [{buyableWeaponsPrices[i]} gold]");
                     Console.WriteLine($"{i + 1}: {buyableWeapons[i]}");
+                }
+                Console.WriteLine("Armour:");
+                for (int i = 0; i < nameList.qualityNames.Count; i++)
+                {
+                    
                 }
                 Console.WriteLine("[or \"Leave\"]");
                 string userInput = Console.ReadLine().ToLower();
@@ -162,7 +168,7 @@
                         Console.WriteLine($"You bought a {buyableWeapons[index - 1].Substring(0, bTo)}, sold your {player.weapon.name} and left the Blacksmiths Shop.");
 
                         player.weapon.name = buyableWeapons[index - 1].Substring(0, bTo);
-                        player.weapon.quality = player.weapon.qualities[index - 1];
+                        player.weapon.quality = nameList.qualityNames[index - 1];
                         acceptedAnswer = true;
 
                     }
@@ -251,11 +257,11 @@
 
             if (userAction == "attack" || userAction == "a")
             {
-                player.Attack(fighters[currentEnemy]);
+                player.Attack(fighters[currentEnemy], nameList);
             }
             if (enemyaction == 0)
             {
-                fighters[currentEnemy].Attack(player);
+                fighters[currentEnemy].Attack(player, nameList);
             }
 
             if (player.blocking && fighters[currentEnemy].blocking)
@@ -294,7 +300,7 @@
         currentEnemy = fighters.Count - 1;
         fighters[currentEnemy].Name(nameList.GetPersonName());
         int enemyQuality = generator.Next(4);
-        fighters[currentEnemy].weapon.quality = fighters[currentEnemy].weapon.qualities[enemyQuality];
-        fighters[currentEnemy].weapon.name = fighters[currentEnemy].weapon.qualities[enemyQuality] + " " + nameList.GetWeaponName();
+        fighters[currentEnemy].weapon.quality = nameList.qualityNames[enemyQuality];
+        fighters[currentEnemy].weapon.name = nameList.qualityNames[enemyQuality] + " " + nameList.GetWeaponName();
     }
 }

@@ -119,11 +119,11 @@ else if (!singlePlayer)
 
         if (player1Input == "attack" || player1Input == "a")
         {
-            player1.Attack(player2);
+            player1.Attack(player2, nameList);
         }
         if (player2Input == "attack" || player2Input == "a")
         {
-            player2.Attack(player1);
+            player2.Attack(player1, nameList);
         }
 
         if (player1.blocking && player2.blocking)

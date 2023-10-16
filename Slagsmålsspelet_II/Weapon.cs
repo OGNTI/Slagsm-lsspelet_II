@@ -2,33 +2,32 @@
 {
     public string name = "Dagger";
     public string quality = "Rubbish";
-    public List<string> qualities = new() {"Rubbish", "Decent", "Fine", "Exceptional"};
     int baseDamage;
     int baseDamageRange;
     Random generator = new();
 
 
-    public int GetDamage()
+    public int GetDamage(NameLists nameList)
     {
-        if (quality == qualities[0])
+        if (quality == nameList.qualityNames[0])
         {
-            baseDamage = 6;
+            baseDamage = 8;
             baseDamageRange = 3;
         }
-        else if (quality == qualities[1])
+        else if (quality == nameList.qualityNames[1])
         {
-            baseDamage = 10;
+            baseDamage = 13;
             baseDamageRange = 3;
         }
-        else if (quality == qualities[2])
+        else if (quality == nameList.qualityNames[2])
         {
-            baseDamage = 17;
+            baseDamage = 18;
             baseDamageRange = 3;
         }
-        else if (quality == qualities[3])
+        else if (quality == nameList.qualityNames[3])
         {
-            baseDamage = 24;
-            baseDamageRange = 6;
+            baseDamage = 25;
+            baseDamageRange = 7;
         }
         else if (quality == "Legendary")
         {

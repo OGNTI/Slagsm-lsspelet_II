@@ -5,6 +5,9 @@
     public int maxHp = 100;
     public int currentHp = 100;
     public Weapon weapon = new();
+    public List<Armour> armours = new();
+    public int totalArmour;
+    public int dodge;
     public bool blocking = false;
     public bool isPlayer = false;
     bool alive;
@@ -34,7 +37,7 @@
         alive = true;
     }
 
-    public void Attack(Fighter target)
+    public void Attack(Fighter target, NameLists nameList)
     {
         if (target.blocking)
         {
@@ -42,7 +45,7 @@
         }
         else
         {
-            int damage = weapon.GetDamage();
+            int damage = weapon.GetDamage(nameList);
             target.currentHp -= damage;
             Console.WriteLine($"{name} attacked {target.name}. [DMG: {damage}]");
         }
