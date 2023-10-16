@@ -1,4 +1,4 @@
-﻿public class Armour
+﻿public class Armour: Gear
 {
     public string name = "errorName";
     public string quality;

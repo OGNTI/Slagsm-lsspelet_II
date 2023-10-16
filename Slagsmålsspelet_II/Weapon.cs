@@ -1,4 +1,4 @@
-﻿public class Weapon
+﻿public class Weapon: Gear
 {
     public string name = "Dagger";
     public string quality = "Rubbish";
