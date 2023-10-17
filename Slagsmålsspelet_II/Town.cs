@@ -102,14 +102,14 @@
             {
                 Console.WriteLine("What do you wish to buy?");
                 Console.WriteLine("Weapons:");
-                for (int i = 0; i < nameList.qualityNames.Count; i++)
+                for (int i = 0; i < player.weapon.qualityNames.Count; i++)
                 {
                     buyableWeaponsPrices[i] = generator.Next(buyableWeaponsPrices[i] - buyableWeaponsPricesRange, buyableWeaponsPrices[i] + buyableWeaponsPricesRange + 1);
-                    buyableWeapons.Add(nameList.qualityNames[i] + " " + nameList.GetWeaponName() + $" - [{buyableWeaponsPrices[i]} gold]");
+                    buyableWeapons.Add(player.weapon.qualityNames[i] + " " + nameList.GetWeaponName() + $" - [{buyableWeaponsPrices[i]} gold]");
                     Console.WriteLine($"{i + 1}: {buyableWeapons[i]}");
                 }
                 Console.WriteLine("Armour:");
-                for (int i = 0; i < nameList.qualityNames.Count; i++)
+                for (int i = 0; i < player.weapon.qualityNames.Count; i++)
                 {
                     
                 }
@@ -163,12 +163,14 @@
                 {
                     if (bought)
                     {
-                        int bTo = buyableWeapons[index - 1].IndexOf(" -");
+                        // int bTo = buyableWeapons[index - 1].IndexOf(" -");
+                        string oldWeapon = player.weapon.name;
+                        player.weapon.GetName(player, buyableWeapons[index - 1], index-1);
 
-                        Console.WriteLine($"You bought a {buyableWeapons[index - 1].Substring(0, bTo)}, sold your {player.weapon.name} and left the Blacksmiths Shop.");
+                        Console.WriteLine($"You bought a {player.weapon.name}, sold your {oldWeapon} and left the Blacksmiths Shop.");
 
-                        player.weapon.name = buyableWeapons[index - 1].Substring(0, bTo);
-                        player.weapon.quality = nameList.qualityNames[index - 1];
+                        // player.weapon.name = buyableWeapons[index - 1].Substring(0, bTo);
+                        // player.weapon.quality = player.weapon.qualityNames[index - 1];
                         acceptedAnswer = true;
 
                     }
@@ -300,7 +302,7 @@
         currentEnemy = fighters.Count - 1;
         fighters[currentEnemy].Name(nameList.GetPersonName());
         int enemyQuality = generator.Next(4);
-        fighters[currentEnemy].weapon.quality = nameList.qualityNames[enemyQuality];
-        fighters[currentEnemy].weapon.name = nameList.qualityNames[enemyQuality] + " " + nameList.GetWeaponName();
+        fighters[currentEnemy].weapon.quality = fighters[currentEnemy].weapon.qualityNames[enemyQuality];
+        fighters[currentEnemy].weapon.name = fighters[currentEnemy].weapon.qualityNames[enemyQuality] + " " + nameList.GetWeaponName();
     }
 }

@@ -1,30 +1,37 @@
 ﻿public class Weapon: Gear
 {
-    public string name = "Dagger";
-    public string quality = "Rubbish";
+    // public string name = "Dagger";
+    // public string quality = "Rubbish";
     int baseDamage;
     int baseDamageRange;
     Random generator = new();
 
+    public void GetName(Fighter fighter, string input, int qualityIndex)
+    {
+        int bTo = input.IndexOf(" -");
+
+        fighter.weapon.name = input.Substring(0, bTo);
+        fighter.weapon.quality = fighter.weapon.qualityNames[qualityIndex];
+    }
 
     public int GetDamage(NameLists nameList)
     {
-        if (quality == nameList.qualityNames[0])
+        if (quality == qualityNames[0])
         {
             baseDamage = 8;
             baseDamageRange = 3;
         }
-        else if (quality == nameList.qualityNames[1])
+        else if (quality == qualityNames[1])
         {
             baseDamage = 13;
             baseDamageRange = 3;
         }
-        else if (quality == nameList.qualityNames[2])
+        else if (quality == qualityNames[2])
         {
             baseDamage = 18;
             baseDamageRange = 3;
         }
-        else if (quality == nameList.qualityNames[3])
+        else if (quality == qualityNames[3])
         {
             baseDamage = 25;
             baseDamageRange = 7;
