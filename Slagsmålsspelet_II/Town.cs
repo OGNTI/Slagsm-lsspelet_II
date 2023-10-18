@@ -102,7 +102,7 @@
             while (!acceptedAnswer)
             {
                 Console.WriteLine("What do you wish to buy?");
-                Console.WriteLine(" \nWeapons:");
+                Console.WriteLine("\nWeapons:");
                 for (int i = 0; i < player.weapon.qualityNames.Count; i++)
                 {
                     if (buyableWeapons.Count < player.weapon.qualityNames.Count)
@@ -125,92 +125,24 @@
                     buyableArmourPrices[i] = generator.Next(buyableArmourPrices[i] - priceRange, buyableArmourPrices[i] + priceRange + 1);
                     Console.WriteLine($"{i + buyableWeapons.Count + 1}: {buyableArmour[i].name} - [{buyableArmourPrices[i]} gold]");
                 }
-                Console.WriteLine(" \n[or \"Leave\"]");
+                Console.WriteLine("\n[or \"Leave\"]");
                 string userInput = Console.ReadLine().ToLower();
                 int.TryParse(userInput, out int index);
 
                 bool bought = false;
-
-                //Weapons
-                if (index == 1)
-                {
-                    if (player.gold >= buyableWeaponsPrices[index - 1])
-                    {
-                        player.gold -= buyableWeaponsPrices[index - 1];
-                        bought = true;
-                    }
-                }
-                else if (index == 2)
-                {
-                    if (player.gold >= buyableWeaponsPrices[index - 1])
-                    {
-                        player.gold -= buyableWeaponsPrices[index - 1];
-                        bought = true;
-                    }
-                }
-                else if (index == 3)
-                {
-                    if (player.gold >= buyableWeaponsPrices[index - 1])
-                    {
-                        player.gold -= buyableWeaponsPrices[index - 1];
-                        bought = true;
-                    }
-                }
-                else if (index == 4)
-                {
-                    if (player.gold >= buyableWeaponsPrices[index - 1])
-                    {
-                        player.gold -= buyableWeaponsPrices[index - 1];
-                        bought = true;
-                    }
-                }
-
-                //Armour
-                else if (index == 5)
-                {
-                    if (player.gold >= buyableArmourPrices[index - 1])
-                    {
-                        player.gold -= buyableArmourPrices[index - 1];
-                        bought = true;
-                    }
-                }
-                else if (index == 6)
-                {
-                    if (player.gold >= buyableArmourPrices[index - 1])
-                    {
-                        player.gold -= buyableArmourPrices[index - 1];
-                        bought = true;
-                    }
-                }
-                else if (index == 7)
-                {
-                    if (player.gold >= buyableArmourPrices[index - 1])
-                    {
-                        player.gold -= buyableArmourPrices[index - 1];
-                        bought = true;
-                    }
-                }
-                else if (index == 8)
-                {
-                    if (player.gold >= buyableArmourPrices[index - 1])
-                    {
-                        player.gold -= buyableArmourPrices[index - 1];
-                        bought = true;
-                    }
-                }
-
-                else if (userInput == "leave")
-                {
-                    Console.WriteLine("You left the Blacksmiths Shop.");
-                    acceptedAnswer = true;
-                }
-                else
-                {
-                    Console.WriteLine("That was not an option.");
-                }
-
                 if (index >= 1 && index <= 8)
                 {
+                    if (player.gold >= buyableArmourPrices[index - buyableArmourPrices.Count - 1])
+                    {
+                        player.gold -= buyableArmourPrices[index - buyableArmourPrices.Count - 1];
+                        bought = true;
+                    }
+                    else if (player.gold >= buyableWeaponsPrices[index - 1])
+                    {
+                        player.gold -= buyableWeaponsPrices[index - 1];
+                        bought = true;
+                    }
+
                     if (bought && index <= 4)
                     {
                         string oldWeapon = player.weapon.name;
@@ -223,21 +155,48 @@
                     }
                     else if (bought && index >= 4)
                     {
-                        string type = buyableArmour[index-1].type;
-                        
+                        index -= buyableArmourPrices.Count;
+                        int abc = 0;
+                        if (buyableArmour[index - 1].type == buyableArmour[index - 1].types[0])
+                        {
+                            abc = 0;
+                        }
+                        else if (buyableArmour[index - 1].type == buyableArmour[index - 1].types[1])
+                        {
+                            abc = 1;
+                        }
+                        else if (buyableArmour[index - 1].type == buyableArmour[index - 1].types[2])
+                        {
+                            abc = 2;
+                        }
 
-                        // string oldWeapon = player.weapon.name;
-                        // player.weapon.SetName(buyableWeapons[index - 1].type, index - 1);
-                        // buyableWeapons.Clear();
+                        string oldArmour = player.armours[abc].name;
+                        player.AddArmour(buyableArmour[index - 1]);
+                        buyableArmour.Clear();
+                        if (oldArmour == null)
+                        {
+                            Console.WriteLine($"You bought a {player.armours[abc].name} and left the Blacksmiths Shop.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You bought a {player.armours[abc].name}, sold your {oldArmour} and left the Blacksmiths Shop.");
+                        }
 
-                        // Console.WriteLine($"You bought a {player.weapon.name}, sold your {oldWeapon} and left the Blacksmiths Shop.");
-
-                        // acceptedAnswer = true;
+                        acceptedAnswer = true;
                     }
                     else
                     {
                         Console.WriteLine("You do not have enough gold to buy that. \n ");
                     }
+                }
+                else if (userInput == "leave")
+                {
+                    Console.WriteLine("You left the Blacksmiths Shop.");
+                    acceptedAnswer = true;
+                }
+                else
+                {
+                    Console.WriteLine("That was not an option.");
                 }
             }
         }
@@ -289,6 +248,7 @@
                     if (i == currentEnemy || fighters[i] is Player)
                     {
                         fighters[i].PrintStats();
+                        fighters[i].SetArmourValues();
                     }
                 }
                 Console.WriteLine("");
@@ -361,7 +321,9 @@
         fighters.Add(new Fighter());
         currentEnemy = fighters.Count - 1;
         fighters[currentEnemy].Name(nameList.GetPersonName());
-        int enemyQuality = generator.Next(4);
-        fighters[currentEnemy].weapon.SetName(nameList.GetWeaponTypeName(), enemyQuality);
+        int enemyWeaponQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
+        fighters[currentEnemy].weapon.SetName(nameList.GetWeaponTypeName(), enemyWeaponQuality);
+        int enemyArmourQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
+        // fighters[currentEnemy]
     }
 }

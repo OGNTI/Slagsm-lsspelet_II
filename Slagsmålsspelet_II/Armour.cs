@@ -1,6 +1,7 @@
 ﻿public class Armour: Gear
 {
     public List<string> types = new() {"Leggings", "Chestplate", "Helmet"};
+    public bool exists = false;
     public int armourValue;
     public int dodgeValue;
 
@@ -17,25 +18,72 @@
 
     void SetBaseStats()
     {
+        exists = true;
+
         if (quality == qualityNames[0])
         {
-            armourValue = 5;
+            if (type == types[0])
+            {
+                armourValue = 5;
+            }
+            else if (type == types[1])
+            {
+                armourValue = 7;
+            }
+            else if (type == types[2])
+            {
+                armourValue = 3;
+            }
         }
         else if (quality == qualityNames[1])
         {
-            armourValue = 12;
+            if (type == types[0])
+            {
+                armourValue = 12;
+            }
+            else if (type == types[1])
+            {
+                armourValue = 15;
+            }
+            else if (type == types[2])
+            {
+                armourValue = 9;
+            }
         }
         else if (quality == qualityNames[2])
         {
-            armourValue = 20;
-        }else if (quality == qualityNames[3])
+            if (type == types[0])
+            {
+                armourValue = 18;
+            }
+            else if (type == types[1])
+            {
+                armourValue = 22;
+            }
+            else if (type == types[2])
+            {
+                armourValue = 15;
+            }
+        }
+        else if (quality == qualityNames[3])
         {
-            armourValue = 34;
+            if (type == types[0])
+            {
+                armourValue = 28;
+            }
+            else if (type == types[1])
+            {
+                armourValue = 35;
+            }
+            else if (type == types[2])
+            {
+                armourValue = 23;
+            }
         }
 
         if (material == materialNames[0])
         {
-            dodgeValue = 15;
+            dodgeValue = 9;
         }
         else if (material == materialNames[1])
         {
