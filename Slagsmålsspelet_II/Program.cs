@@ -33,7 +33,6 @@ if (singlePlayer)
     fighters.Add(player);
     town.AddEnemy(fighters, nameList);
     gaming = true;
-    player.gold = generator.Next(10 + 1);
 
     while (gaming)
     {

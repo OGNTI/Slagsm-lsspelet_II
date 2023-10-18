@@ -4,9 +4,10 @@
     public int maxHp = 100;
     public int currentHp = 100;
     public Weapon weapon = new();
-    public List<Armour> armours = new();
+    public Armour[] armours = {new Armour(), new Armour(), new Armour()};
+    // public List<Armour> armours = new();
     public int totalArmour;
-    public int dodge;
+    public int totalDodge;
     public bool blocking = false;
     bool alive;
     

@@ -7,11 +7,32 @@
 
     public void SetName(string nameInput, int qualityIndex)
     {
-        name = qualityNames[qualityIndex] + " " + nameInput;
-        quality = qualityNames[qualityIndex];
+        type = nameInput;
+        if (qualityIndex >= qualityNames.Count)
+        {
+            quality = "Legendary";
+        }
+        else
+        {
+            quality = qualityNames[qualityIndex];
+        }
+        name = quality + " " + type;
+        SetBaseStats();
+    }
+
+    public int GetStats()
+    {
+        return baseDamage;
     }
 
     public int GetDamage(NameLists nameList)
+    {
+        int damage = generator.Next(baseDamage - baseDamageRange, baseDamage + baseDamageRange + 1);
+
+        return damage;
+    }
+
+    void SetBaseStats()
     {
         if (quality == qualityNames[0])
         {
@@ -38,8 +59,5 @@
             baseDamage = 50;
             baseDamageRange = 5;
         }
-        int damage = generator.Next(baseDamage - baseDamageRange, baseDamage + baseDamageRange + 1);
-
-        return damage;
     }
 }

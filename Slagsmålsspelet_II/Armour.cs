@@ -1,19 +1,21 @@
 ﻿public class Armour: Gear
 {
-    public string type;
     public List<string> types = new() {"Leggings", "Chestplate", "Helmet"};
-    int armourValue;
-    int dodgeValue;
+    public int armourValue;
+    public int dodgeValue;
 
-    public string GetName()
+    public string SetName(int typeIndex, int materialIndex, int qualityIndex)
     {
+        type = types[typeIndex];
+        material = materialNames[materialIndex];
+        quality = qualityNames[qualityIndex];
         name = quality + " " + material + " " + type;
-        
+        SetBaseStats();
 
         return name;
     }
 
-    public int GetArmourValue()
+    void SetBaseStats()
     {
         if (quality == qualityNames[0])
         {
@@ -23,19 +25,14 @@
         {
             armourValue = 12;
         }
-        else if (quality == qualityNames[3])
+        else if (quality == qualityNames[2])
         {
             armourValue = 20;
-        }else if (quality == qualityNames[4])
+        }else if (quality == qualityNames[3])
         {
             armourValue = 34;
         }
 
-        return armourValue;
-    }
-
-    public int GetArmourDodge()
-    {
         if (material == materialNames[0])
         {
             dodgeValue = 15;
@@ -56,9 +53,6 @@
         {
             dodgeValue = 5;
         }
-
-
-        return dodgeValue;
     }
 }
 
