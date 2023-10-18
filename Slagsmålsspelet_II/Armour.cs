@@ -1,10 +1,5 @@
 ﻿public class Armour: Gear
 {
-    // public string name = "errorName";
-    // public string quality;
-    // public List<string> qualities = new() {"Rubbish", "Decent", "Fine", "Exceptional"};
-    // public string material;
-    // public List<string> materials = new() {"Leather", "Iron", "Steel"};
     public string type;
     public List<string> types = new() {"Leggings", "Chestplate", "Helmet"};
     int armourValue;

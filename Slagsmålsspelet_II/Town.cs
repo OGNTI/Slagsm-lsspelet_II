@@ -43,12 +43,12 @@
         int sleepRegen = 0;
         if (rats == 0)
         {
-            sleepRegen = generator.Next(player.maxHp/7);
+            sleepRegen = generator.Next(player.maxHp / 7);
             Console.WriteLine($"You spend the night sleeping on the street, ever' so often being \nawoken by a rat nibbling on your feet.");
         }
         else
         {
-            sleepRegen -= generator.Next(player.maxHp/6);
+            sleepRegen -= generator.Next(player.maxHp / 6);
             Console.WriteLine($"You spend the night sleeping on the street in dread as it rains and \nthe local rats are determined to get inside you and bask in your inner warmth.");
         }
         player.currentHp += sleepRegen;
@@ -71,7 +71,7 @@
         if (streak >= requiredStreak && possibleLegendary != "Legendary")
         {
             int legenWeaponPrice = 50;
-            string legenWeaponName = nameList.GetWeaponName();
+            string legenWeaponName = nameList.GetWeaponTypeName();
             Console.WriteLine($"You enter the Blacksmiths Shop and greet Hephaestus, he takes you to the back of his shop where his forge lies. \nHe tells you he's been collecting the weapons of you fallen opponents and from them he has \nforged a Legendary {legenWeaponName} and he is willing to sell you it for the cheap price of {legenWeaponPrice} gold. \nDo you take his offer? [yes/no]");
             string userInput = Console.ReadLine().ToLower().Trim();
 
@@ -89,7 +89,7 @@
                     Console.WriteLine("You do not have enough gold to buy it.");
                 }
             }
-            else 
+            else
             {
                 Console.WriteLine($"You did not buy the Legendary {legenWeaponName}.");
             }
@@ -104,14 +104,18 @@
                 Console.WriteLine("Weapons:");
                 for (int i = 0; i < player.weapon.qualityNames.Count; i++)
                 {
+                    if (buyableWeapons.Count < player.weapon.qualityNames.Count)
+                    {
+                        buyableWeapons.Add(nameList.GetWeaponTypeName());
+                    }
                     buyableWeaponsPrices[i] = generator.Next(buyableWeaponsPrices[i] - buyableWeaponsPricesRange, buyableWeaponsPrices[i] + buyableWeaponsPricesRange + 1);
-                    buyableWeapons.Add(player.weapon.qualityNames[i] + " " + nameList.GetWeaponName() + $" - [{buyableWeaponsPrices[i]} gold]");
-                    Console.WriteLine($"{i + 1}: {buyableWeapons[i]}");
+                    Console.WriteLine($"{i + 1}: {player.weapon.qualityNames[i]} {buyableWeapons[i]} - [{buyableWeaponsPrices[i]} gold]");
                 }
+                Console.WriteLine(player.weapon.name);
                 Console.WriteLine("Armour:");
                 for (int i = 0; i < player.weapon.qualityNames.Count; i++)
                 {
-                    
+
                 }
                 Console.WriteLine("[or \"Leave\"]");
                 string userInput = Console.ReadLine().ToLower();
@@ -163,16 +167,13 @@
                 {
                     if (bought)
                     {
-                        // int bTo = buyableWeapons[index - 1].IndexOf(" -");
                         string oldWeapon = player.weapon.name;
-                        player.weapon.GetName(buyableWeapons[index - 1], index-1);
+                        player.weapon.SetName(buyableWeapons[index - 1], index - 1);
+                        buyableWeapons.Clear();
 
                         Console.WriteLine($"You bought a {player.weapon.name}, sold your {oldWeapon} and left the Blacksmiths Shop.");
 
-                        // player.weapon.name = buyableWeapons[index - 1].Substring(0, bTo);
-                        // player.weapon.quality = player.weapon.qualityNames[index - 1];
                         acceptedAnswer = true;
-
                     }
                     else
                     {
@@ -223,7 +224,7 @@
                 Console.WriteLine("You accept the fight and head out to the fighting pit.");
                 fight = true;
                 acceptedAnswer = true;
-                
+
                 for (int i = 0; i < fighters.Count; i++)
                 {
                     if (i == currentEnemy || fighters[i] is Player)
@@ -303,6 +304,6 @@
         fighters[currentEnemy].Name(nameList.GetPersonName());
         int enemyQuality = generator.Next(4);
         fighters[currentEnemy].weapon.quality = fighters[currentEnemy].weapon.qualityNames[enemyQuality];
-        fighters[currentEnemy].weapon.name = fighters[currentEnemy].weapon.qualityNames[enemyQuality] + " " + nameList.GetWeaponName();
+        fighters[currentEnemy].weapon.name = fighters[currentEnemy].weapon.qualityNames[enemyQuality] + " " + nameList.GetWeaponTypeName();
     }
 }

@@ -3,7 +3,10 @@
     public int gold;
 
 
-
+    public void SetStart()
+    {
+        weapon.SetName("Dagger", 0);
+    }
 
     public void OpenInventory()
     {

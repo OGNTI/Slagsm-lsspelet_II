@@ -1,16 +1,13 @@
-﻿public class Weapon: Gear
+﻿public class Weapon : Gear
 {
-    // public string name = "Dagger";
-    // public string quality = "Rubbish";
     int baseDamage;
     int baseDamageRange;
     Random generator = new();
 
-    public void GetName(string input, int qualityIndex)
-    {
-        int bTo = input.IndexOf(" -"); //make list with buyableWeaponNames instead and add price in foreach
 
-        name = input.Substring(0, bTo);
+    public void SetName(string nameInput, int qualityIndex)
+    {
+        name = qualityNames[qualityIndex] + " " + nameInput;
         quality = qualityNames[qualityIndex];
     }
 

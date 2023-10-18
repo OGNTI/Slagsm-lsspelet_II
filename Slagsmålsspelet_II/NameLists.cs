@@ -1,22 +1,22 @@
 ﻿public class NameLists
 {
-    List<string> personNames = new() {"Bob", "Steve", "Greg", "Flavia", "Quintis", "Tiberius", "Bjornulf", "Glenn"};
-    List<string> weaponNames = new() {"Spatha", "Axe", "Spear", "Dagger", "Hammer", "Gladius", "Trident", "Javelin", "Crossbow", "Greatsword"};
+    List<string> personNames = new() { "Bob", "Steve", "Greg", "Flavia", "Quintis", "Tiberius", "Bjornulf", "Glenn" };
+    List<string> weaponTypeNames = new() { "Spatha", "Axe", "Spear", "Dagger", "Hammer", "Gladius", "Trident", "Javelin", "Crossbow", "Greatsword" };
     Random generator = new();
-    
+
 
     public string GetPersonName()
-    {   
+    {
         int index = generator.Next(personNames.Count);
         string name = personNames[index];
 
         return name;
     }
 
-    public string GetWeaponName()
+    public string GetWeaponTypeName()
     {
-        int index = generator.Next(weaponNames.Count);
-        string name = weaponNames[index];
+        int index = generator.Next(weaponTypeNames.Count);
+        string name = weaponTypeNames[index];
 
         return name;
     }
