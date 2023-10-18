@@ -8,10 +8,12 @@
     public string type;
     public List<string> types = new() {"Leggings", "Chestplate", "Helmet"};
     int armourValue;
+    int dodgeValue;
 
     public string GetName()
     {
         name = quality + " " + material + " " + type;
+        
 
         return name;
     }
@@ -35,6 +37,33 @@
         }
 
         return armourValue;
+    }
+
+    public int GetArmourDodge()
+    {
+        if (material == materialNames[0])
+        {
+            dodgeValue = 15;
+        }
+        else if (material == materialNames[1])
+        {
+            dodgeValue = -10;
+        }
+        else if (material == materialNames[2])
+        {
+            dodgeValue = -5;
+        }
+        else if (material == materialNames[3])
+        {
+            dodgeValue = -7;
+        }
+        else if (material == materialNames[4])
+        {
+            dodgeValue = 5;
+        }
+
+
+        return dodgeValue;
     }
 }
 

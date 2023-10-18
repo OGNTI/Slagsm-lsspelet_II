@@ -11,7 +11,7 @@
     Random generator = new Random();
 
 
-    public void Inn(Fighter player, NameLists nameList, List<Fighter> fighters)
+    public void Inn(Player player, NameLists nameList, List<Fighter> fighters)
     {
         int innCost = generator.Next(10 - 3, 10 + 3 + 1);
         Console.WriteLine($"You wish to rest at the Inn to regain your health. \nInnkeeper tells you it will cost {innCost} gold for a night, \ndo you still wish to rest? [yes/no]");
@@ -36,7 +36,7 @@
         }
     }
 
-    public void Street(Fighter player, NameLists nameList, List<Fighter> fighters)
+    public void Street(Player player, NameLists nameList, List<Fighter> fighters)
     {
 
         int rats = generator.Next(2);
@@ -55,7 +55,7 @@
         AddEnemy(fighters, nameList);
     }
 
-    public void Shop(Fighter player, NameLists nameList, List<Fighter> fighters)
+    public void Shop(Player player, NameLists nameList, List<Fighter> fighters)
     {
         int streak = 0;
         foreach (Fighter f in fighters)
@@ -165,7 +165,7 @@
                     {
                         // int bTo = buyableWeapons[index - 1].IndexOf(" -");
                         string oldWeapon = player.weapon.name;
-                        player.weapon.GetName(player, buyableWeapons[index - 1], index-1);
+                        player.weapon.GetName(buyableWeapons[index - 1], index-1);
 
                         Console.WriteLine($"You bought a {player.weapon.name}, sold your {oldWeapon} and left the Blacksmiths Shop.");
 
@@ -183,14 +183,14 @@
         }
     }
 
-    public void Arena(Fighter player, NameLists nameList, List<Fighter> fighters)
+    public void Arena(Player player, NameLists nameList, List<Fighter> fighters)
     {
         // fighters.RemoveAll(f => !f.GetAlive());
         existingEnemies.Clear();
         bool fightersExist = false;
         for (int i = 0; i < fighters.Count; i++)
         {
-            if (fighters[i].GetAlive() && !fighters[i].isPlayer)
+            if (fighters[i].GetAlive() && fighters[i] is Fighter)
             {
                 fightersExist = true;
                 existingEnemies.Add(i);
@@ -226,7 +226,7 @@
                 
                 for (int i = 0; i < fighters.Count; i++)
                 {
-                    if (i == currentEnemy || fighters[i].isPlayer)
+                    if (i == currentEnemy || fighters[i] is Player)
                     {
                         fighters[i].PrintStats();
                     }
@@ -276,7 +276,7 @@
             Console.Clear();
             for (int i = 0; i < fighters.Count; i++)
             {
-                if (i == currentEnemy || fighters[i].isPlayer)
+                if (i == currentEnemy || fighters[i] is Player)
                 {
                     fighters[i].PrintStats();
                 }

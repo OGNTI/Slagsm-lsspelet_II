@@ -1,7 +1,6 @@
 ﻿public class Fighter
 {
     public string name = "Errorson";
-    public int gold;
     public int maxHp = 100;
     public int currentHp = 100;
     public Weapon weapon = new();
@@ -9,7 +8,6 @@
     public int totalArmour;
     public int dodge;
     public bool blocking = false;
-    public bool isPlayer = false;
     bool alive;
     
 
@@ -77,10 +75,4 @@
 
         return alive;
     }
-
-    public void OpenInventory()
-    {
-        Console.WriteLine($"\nYou own: \n{weapon.name}");
-    }
 }
-

@@ -6,12 +6,12 @@
     int baseDamageRange;
     Random generator = new();
 
-    public void GetName(Fighter fighter, string input, int qualityIndex)
+    public void GetName(string input, int qualityIndex)
     {
-        int bTo = input.IndexOf(" -");
+        int bTo = input.IndexOf(" -"); //make list with buyableWeaponNames instead and add price in foreach
 
-        fighter.weapon.name = input.Substring(0, bTo);
-        fighter.weapon.quality = fighter.weapon.qualityNames[qualityIndex];
+        name = input.Substring(0, bTo);
+        quality = qualityNames[qualityIndex];
     }
 
     public int GetDamage(NameLists nameList)

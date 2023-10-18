@@ -27,10 +27,9 @@ while (!acceptedAnswer)
 if (singlePlayer)
 {
     Console.WriteLine("What is your name?");
-    Fighter player = new();
+    Player player = new();
     player.Name(Console.ReadLine().Trim());
     player.weapon.name = player.weapon.quality + " " + player.weapon.name;
-    player.isPlayer = true;
     fighters.Add(player);
     town.AddEnemy(fighters, nameList);
     gaming = true;
