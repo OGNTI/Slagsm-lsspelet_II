@@ -6,16 +6,16 @@ public class Fighter
     public int maxHp = 100;
     public int currentHp = 100;
     public Weapon weapon = new();
-    public Armour[] armours = {new Armour(), new Armour(), new Armour()};
+    public Armour[] armours = { new Armour(), new Armour(), new Armour() };
     // public List<Armour> armours = new();
     public int totalArmour;
     public int totalDodge;
     public bool blocking = false;
-    public int noArmourDodge = 30;
+    public int noArmourDodge = 10;
     bool alive;
     bool hasArmour;
     Random generator = new Random();
-    
+
 
     public void Name(string nameInput)
     {
@@ -50,18 +50,22 @@ public class Fighter
         else
         {
             int miss = generator.Next(4);
-            // add dodge thing, totalDodge decides like 30 dodge = 1/3 chance
-            if (miss == 0)
+            int dodge = generator.Next(90);
+            if (dodge <= target.totalDodge - 1)
+            {
+                Console.WriteLine($"{name} attacked {target.name} but {target.name} dodged the attack.");
+            }
+            else if (miss == 0)
             {
                 Console.WriteLine($"{name} attacked {target.name} but missed.");
             }
-            else 
+            else
             {
                 int damage = 0;
                 int damageBA = weapon.GetDamage(nameList);
                 if (target.HasArmour())
                 {
-                    float damageReduction = target.totalArmour/100;
+                    float damageReduction = target.totalArmour / 100;
                     float damageAA = damageBA - damageBA * damageReduction;
                     damage = (int)damageAA;
                 }
@@ -138,14 +142,17 @@ public class Fighter
 
             foreach (Armour a in armours)
             {
-                totalArmour += a.armourValue;
-                totalDodge += a.dodgeValue;
+                if (a.name == null)
+                {
+                    totalArmour += 0;
+                    totalDodge += noArmourDodge;
+                }
+                else 
+                {
+                    totalArmour += a.armourValue;
+                    totalDodge += a.dodgeValue;
+                }
             }
-        }
-        else
-        {
-            totalArmour = 0;
-            totalDodge = noArmourDodge;
         }
     }
 }

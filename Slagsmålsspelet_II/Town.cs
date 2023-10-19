@@ -132,7 +132,7 @@
                 bool bought = false;
                 if (index >= 1 && index <= 8)
                 {
-                    if (player.gold >= buyableArmourPrices[index - buyableArmourPrices.Count - 1])
+                    if (player.gold >= buyableArmourPrices[index - buyableArmourPrices.Count - 1]) //add one index variable for weapons and one for armour, created after the readline and tryparse
                     {
                         player.gold -= buyableArmourPrices[index - buyableArmourPrices.Count - 1];
                         bought = true;

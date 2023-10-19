@@ -8,7 +8,7 @@
     {
         weapon.SetName("Dagger", 0);
         armours[0].SetName(0, 0, 0);
-        gold = generator.Next(10 + 1);
+        gold = generator.Next(1000 + 1);
     }
 
     public void OpenInventory()
