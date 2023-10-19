@@ -7,7 +7,7 @@
     int priceRange = 5;
     int requiredStreak = 6;
     int baseWinnings = 40;
-    int baseWinningsRange = 13;
+    int baseWinningsRange = 12;
     int currentEnemy;
     List<int> existingEnemies = new();
     Random generator = new Random();
@@ -139,7 +139,7 @@
                     wIndex = index;
                 }
                 else if (index <= 8)
-                {   
+                {
                     aIndex = index - buyableArmourPrices.Count;
                 }
 
@@ -152,7 +152,7 @@
                         {
                             player.gold -= buyableWeaponsPrices[wIndex - 1];
                             bought = true;
-                        } 
+                        }
                     }
                     else if (aIndex != 0)
                     {
@@ -249,7 +249,7 @@
             int index = generator.Next(existingEnemies.Count);
             currentEnemy = existingEnemies[index];
             Console.Write($"Your opponent is {fighters[currentEnemy].name} who wields a {fighters[currentEnemy].weapon.name} and wears");
-            if (fighters[currentEnemy].HasArmour()) //Grammar go brrrrrrrrrrrrrrrrrrr
+            if (fighters[currentEnemy].HasArmour())
             {
                 for (int i = 0; i < fighters[currentEnemy].armours.Length; i++)
                 {
@@ -259,23 +259,35 @@
                         {
                             if (fighters[currentEnemy].armours[0].exists)
                             {
-                                // int howMany //this is supposed to detect how many armour pirces and then add the right grammar and/,
-                                if (i == 2)
+                                int howMany = 0;
+                                foreach (Armour a in fighters[currentEnemy].armours)
+                                {
+                                    if (a.exists)
+                                    {
+                                        howMany++;
+                                    }
+                                }
+
+                                if (howMany == 2)
                                 {
                                     Console.Write(" and");
                                 }
-                                else
+                                else if (howMany == 3)
                                 {
-                                    Console.Write(",");
+                                    if (i == 2)
+                                    {
+                                        Console.Write(" and");
+                                    }
+                                    else if (i == 1)
+                                    {
+                                        Console.Write(",");
+                                    }
                                 }
                             }
                         }
 
-                        Console.Write($" {fighters[currentEnemy].armours[i].name}"); 
+                        Console.Write($" {fighters[currentEnemy].armours[i].name}");
                     }
-                }
-                foreach (Armour a in fighters[currentEnemy].armours)
-                {
                 }
             }
             else
@@ -316,27 +328,35 @@
 
         while (player.GetAlive() && fighters[currentEnemy].GetAlive() && fight)
         {
-            Console.WriteLine("Attack or Block?");
+            Console.WriteLine("Light Attack, Heavy Attack or Block? [L/H/B]");
             string userAction = Console.ReadLine().ToLower();
-            int enemyaction = generator.Next(2);
+            int enemyaction = generator.Next(3);
             Console.WriteLine("");
 
             if (userAction == "block" || userAction == "b")
             {
                 player.Block();
             }
-            if (enemyaction == 1)
+            if (enemyaction == 2)
             {
                 fighters[currentEnemy].Block();
             }
 
-            if (userAction == "attack" || userAction == "a")
+            if (userAction == "light" || userAction == "l")
             {
-                player.Attack(fighters[currentEnemy], nameList);
+                player.LightAttack(fighters[currentEnemy], nameList);
+            }
+            else if (userAction == "heavy" || userAction == "h")
+            {
+                player.HeavyAttack(fighters[currentEnemy], nameList);
             }
             if (enemyaction == 0)
             {
-                fighters[currentEnemy].Attack(player, nameList);
+                fighters[currentEnemy].LightAttack(player, nameList);
+            }
+            else if (enemyaction == 1)
+            {
+                fighters[currentEnemy].HeavyAttack(player, nameList);
             }
 
             if (player.blocking && fighters[currentEnemy].blocking)
@@ -387,7 +407,7 @@
                 Armour newArmour = new();
                 newArmour.SetName(i, enemyArmourMaterial, enemyArmourQuality);
                 fighters[currentEnemy].AddArmour(newArmour);
-            }  
+            }
         }
     }
 }

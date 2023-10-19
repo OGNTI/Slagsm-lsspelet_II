@@ -41,18 +41,18 @@
         }
         else if (quality == qualityNames[1])
         {
-            baseDamage = 13;
+            baseDamage = 12;
             baseDamageRange = 3;
         }
         else if (quality == qualityNames[2])
         {
-            baseDamage = 18;
-            baseDamageRange = 3;
+            baseDamage = 17;
+            baseDamageRange = 4;
         }
         else if (quality == qualityNames[3])
         {
-            baseDamage = 25;
-            baseDamageRange = 7;
+            baseDamage = 23;
+            baseDamageRange = 4;
         }
         else if (quality == "Legendary")
         {

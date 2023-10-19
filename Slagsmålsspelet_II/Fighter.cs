@@ -6,8 +6,7 @@ public class Fighter
     public int maxHp = 100;
     public int currentHp = 100;
     public Weapon weapon = new();
-    public Armour[] armours = { new Armour(), new Armour(), new Armour() };
-    // public List<Armour> armours = new();
+    public Armour[] armours = { new Armour(), new Armour(), new Armour() }; //can only have 3 Armours, Legs Chest Head
     public int totalArmour;
     public int totalDodge;
     public bool blocking = false;
@@ -19,7 +18,7 @@ public class Fighter
 
     public void Name(string nameInput)
     {
-        if (nameInput == "")
+        if (nameInput == "") 
         {
             bool acceptedAnswer = false;
             while (!acceptedAnswer)
@@ -41,7 +40,7 @@ public class Fighter
         alive = true;
     }
 
-    public void Attack(Fighter target, NameLists nameList)
+    public void LightAttack(Fighter target, NameLists nameList)
     {
         if (target.blocking)
         {
@@ -49,15 +48,15 @@ public class Fighter
         }
         else
         {
-            int miss = generator.Next(4);
+            int miss = generator.Next(3);
             int dodge = generator.Next(90);
             if (dodge <= target.totalDodge - 1)
             {
-                Console.WriteLine($"{name} attacked {target.name} but {target.name} dodged the attack.");
+                Console.WriteLine($"{name} tried to light attack but {target.name} dodged the attack.");
             }
             else if (miss == 0)
             {
-                Console.WriteLine($"{name} attacked {target.name} but missed.");
+                Console.WriteLine($"{name} tried to light attack {target.name} but missed.");
             }
             else
             {
@@ -74,7 +73,49 @@ public class Fighter
                     damage = (int)damageBA;
                 }
                 target.currentHp -= damage;
-                Console.WriteLine($"{name} attacked {target.name}. [DMG: {damage}]");
+                Console.WriteLine($"{name} light attacked {target.name}. [DMG: {damage}]");
+            }
+        }
+    }
+
+    public void HeavyAttack(Fighter target, NameLists nameList)
+    {
+        int damage = 0;
+        int damageBA = weapon.GetDamage(nameList);
+        int miss = generator.Next(4);
+        int dodge = generator.Next(90);
+
+        if (!target.blocking && dodge <= target.totalDodge * 2 - 1)
+        {
+            Console.WriteLine($"{name} tried to heavy attack but {target.name} dodged the attack.");
+        }
+        else if (!target.blocking && miss == 0)
+        {
+            Console.WriteLine($"{name} tried to heavy attack {target.name} but missed.");
+        }
+        else
+        {
+                
+            if (target.HasArmour())
+            {
+                float damageReduction = target.totalArmour / 100;
+                float damageAA = damageBA - damageBA * damageReduction;
+                damage = (int)damageAA;
+            }
+            else
+            {
+                damage = (int)damageBA;
+            }
+
+            if (target.blocking)
+            {
+                target.currentHp -= damage;
+                Console.WriteLine($"{target.name} tried to block {name}s heavy attack. [DMG: {damage}]");
+            }
+            else 
+            {
+                target.currentHp -= damage * 2;
+                Console.WriteLine($"{name} heavy attacked {target.name}. [DMG: {damage * 2}]");
             }
         }
     }
@@ -147,7 +188,7 @@ public class Fighter
                     totalArmour += 0;
                     totalDodge += noArmourDodge;
                 }
-                else 
+                else
                 {
                     totalArmour += a.armourValue;
                     totalDodge += a.dodgeValue;
