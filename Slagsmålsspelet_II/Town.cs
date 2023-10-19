@@ -26,6 +26,8 @@
                 player.currentHp = player.maxHp;
                 Console.WriteLine("You bought a room at the Inn and spent the night to regain your health.");
                 AddEnemy(fighters, nameList);
+                buyableWeapons.Clear();
+                buyableArmour.Clear();
             }
             else
             {
@@ -55,6 +57,8 @@
         }
         player.currentHp += sleepRegen;
         AddEnemy(fighters, nameList);
+        buyableWeapons.Clear();
+        buyableArmour.Clear();
     }
 
     public void Shop(Player player, NameLists nameList, List<Fighter> fighters)
@@ -128,50 +132,65 @@
                 Console.WriteLine("\n[or \"Leave\"]");
                 string userInput = Console.ReadLine().ToLower();
                 int.TryParse(userInput, out int index);
+                int wIndex = 0;
+                int aIndex = 0;
+                if (index <= 4)
+                {
+                    wIndex = index;
+                }
+                else if (index <= 8)
+                {   
+                    aIndex = index - buyableArmourPrices.Count;
+                }
 
                 bool bought = false;
-                if (index >= 1 && index <= 8)
+                if (wIndex != 0 || aIndex != 0)
                 {
-                    if (player.gold >= buyableArmourPrices[index - buyableArmourPrices.Count - 1]) //add one index variable for weapons and one for armour, created after the readline and tryparse
+                    if (wIndex != 0)
                     {
-                        player.gold -= buyableArmourPrices[index - buyableArmourPrices.Count - 1];
-                        bought = true;
+                        if (player.gold >= buyableWeaponsPrices[wIndex - 1])
+                        {
+                            player.gold -= buyableWeaponsPrices[wIndex - 1];
+                            bought = true;
+                        } 
                     }
-                    else if (player.gold >= buyableWeaponsPrices[index - 1])
+                    else if (aIndex != 0)
                     {
-                        player.gold -= buyableWeaponsPrices[index - 1];
-                        bought = true;
+                        if (player.gold >= buyableArmourPrices[aIndex - 1])
+                        {
+                            player.gold -= buyableArmourPrices[aIndex - 1];
+                            bought = true;
+                        }
                     }
 
-                    if (bought && index <= 4)
+                    if (bought && wIndex != 0)
                     {
                         string oldWeapon = player.weapon.name;
-                        player.weapon.SetName(buyableWeapons[index - 1].type, index - 1);
+                        player.weapon.SetName(buyableWeapons[wIndex - 1].type, wIndex - 1);
                         buyableWeapons.Clear();
 
                         Console.WriteLine($"You bought a {player.weapon.name}, sold your {oldWeapon} and left the Blacksmiths Shop.");
 
                         acceptedAnswer = true;
                     }
-                    else if (bought && index >= 4)
+                    else if (bought && aIndex != 0)
                     {
-                        index -= buyableArmourPrices.Count;
                         int abc = 0;
-                        if (buyableArmour[index - 1].type == buyableArmour[index - 1].types[0])
+                        if (buyableArmour[aIndex - 1].type == buyableArmour[aIndex - 1].types[0])
                         {
                             abc = 0;
                         }
-                        else if (buyableArmour[index - 1].type == buyableArmour[index - 1].types[1])
+                        else if (buyableArmour[aIndex - 1].type == buyableArmour[aIndex - 1].types[1])
                         {
                             abc = 1;
                         }
-                        else if (buyableArmour[index - 1].type == buyableArmour[index - 1].types[2])
+                        else if (buyableArmour[aIndex - 1].type == buyableArmour[aIndex - 1].types[2])
                         {
                             abc = 2;
                         }
 
                         string oldArmour = player.armours[abc].name;
-                        player.AddArmour(buyableArmour[index - 1]);
+                        player.AddArmour(buyableArmour[aIndex - 1]);
                         buyableArmour.Clear();
                         if (oldArmour == null)
                         {
@@ -229,7 +248,41 @@
         {
             int index = generator.Next(existingEnemies.Count);
             currentEnemy = existingEnemies[index];
-            Console.WriteLine($"Your opponent is {fighters[currentEnemy].name} who wields a {fighters[currentEnemy].weapon.name}.");
+            Console.Write($"Your opponent is {fighters[currentEnemy].name} who wields a {fighters[currentEnemy].weapon.name} and wears");
+            if (fighters[currentEnemy].HasArmour()) //Grammar go brrrrrrrrrrrrrrrrrrr
+            {
+                for (int i = 0; i < fighters[currentEnemy].armours.Length; i++)
+                {
+                    if (fighters[currentEnemy].armours[i].exists)
+                    {
+                        if (i != 0)
+                        {
+                            if (fighters[currentEnemy].armours[0].exists)
+                            {
+                                // int howMany //this is supposed to detect how many armour pirces and then add the right grammar and/,
+                                if (i == 2)
+                                {
+                                    Console.Write(" and");
+                                }
+                                else
+                                {
+                                    Console.Write(",");
+                                }
+                            }
+                        }
+
+                        Console.Write($" {fighters[currentEnemy].armours[i].name}"); 
+                    }
+                }
+                foreach (Armour a in fighters[currentEnemy].armours)
+                {
+                }
+            }
+            else
+            {
+                Console.Write(" no armour");
+            }
+            Console.WriteLine(".");
         }
 
         while (!acceptedAnswer)
@@ -324,6 +377,17 @@
         int enemyWeaponQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
         fighters[currentEnemy].weapon.SetName(nameList.GetWeaponTypeName(), enemyWeaponQuality);
         int enemyArmourQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
-        // fighters[currentEnemy]
+        int enemyArmourMaterial = generator.Next(fighters[currentEnemy].weapon.materialNames.Count);
+
+        for (int i = 0; i < fighters[currentEnemy].armours.Length; i++)
+        {
+            int privilegeOfArmour = generator.Next(2);
+            if (privilegeOfArmour == 0)
+            {
+                Armour newArmour = new();
+                newArmour.SetName(i, enemyArmourMaterial, enemyArmourQuality);
+                fighters[currentEnemy].AddArmour(newArmour);
+            }  
+        }
     }
 }
