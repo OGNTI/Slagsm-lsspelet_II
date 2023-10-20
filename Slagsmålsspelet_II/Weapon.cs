@@ -5,7 +5,7 @@
     Random generator = new();
 
 
-    public void SetName(string nameInput, int qualityIndex)
+    public void SetName(string nameInput, int qualityIndex) //create "new" weapon with name and stats
     {
         type = nameInput;
         if (qualityIndex >= qualityNames.Count)
@@ -25,7 +25,7 @@
         return baseDamage;
     }
 
-    public int GetDamage(NameLists nameList)
+    public int GetDamage(NameLists nameList) //random damage between baseDamage +- range
     {
         int damage = generator.Next(baseDamage - baseDamageRange, baseDamage + baseDamageRange + 1);
 
@@ -37,17 +37,17 @@
         if (quality == qualityNames[0])
         {
             baseDamage = 8;
-            baseDamageRange = 3;
+            baseDamageRange = 2;
         }
         else if (quality == qualityNames[1])
         {
             baseDamage = 12;
-            baseDamageRange = 3;
+            baseDamageRange = 2;
         }
         else if (quality == qualityNames[2])
         {
             baseDamage = 17;
-            baseDamageRange = 4;
+            baseDamageRange = 3;
         }
         else if (quality == qualityNames[3])
         {

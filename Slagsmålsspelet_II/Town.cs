@@ -1,21 +1,25 @@
 ﻿public class Town
 {
     List<Weapon> buyableWeapons = new();
-    List<int> buyableWeaponsPrices = new() { 10, 23, 38, 59 };
+    int[] WeaponsPrices = { 10, 23, 38, 59 };
+    int[] buyableWeaponsPrices = { 0, 0, 0, 0 };
     List<Armour> buyableArmour = new();
-    List<int> buyableArmourPrices = new() { 15, 29, 47, 68 };
+    int[] ArmourPrices = { 15, 29, 47, 68 };
+    int[] buyableArmourPrices = { 0, 0, 0, 0 };
     int priceRange = 5;
     int requiredStreak = 6;
     int baseWinnings = 40;
     int baseWinningsRange = 12;
+    int baseInnCost = 10;
+    int baseInnCostRange = 3;
     int currentEnemy;
     List<int> existingEnemies = new();
     Random generator = new Random();
 
 
-    public void Inn(Player player, NameLists nameList, List<Fighter> fighters)
+    public void Inn(Player player, NameLists nameList, List<Fighter> fighters) //pass time, fully regen health with gold
     {
-        int innCost = generator.Next(10 - 3, 10 + 3 + 1);
+        int innCost = generator.Next(baseInnCost - baseInnCostRange, baseInnCost + baseInnCostRange + 1);
         Console.WriteLine($"You wish to rest at the Inn to regain your health. \nInnkeeper tells you it will cost {innCost} gold for a night, \ndo you still wish to rest? [yes/no]");
         string userInput = Console.ReadLine().ToLower();
         if (userInput == "yes" || userInput == "y")
@@ -40,9 +44,8 @@
         }
     }
 
-    public void Street(Player player, NameLists nameList, List<Fighter> fighters)
+    public void Street(Player player, NameLists nameList, List<Fighter> fighters) //pass time, regen or lose health for free
     {
-
         int rats = generator.Next(2);
         int sleepRegen = 0;
         if (rats == 0)
@@ -59,6 +62,11 @@
         AddEnemy(fighters, nameList);
         buyableWeapons.Clear();
         buyableArmour.Clear();
+
+        if (!player.GetAlive())
+        {
+            Console.WriteLine("\nThe rats succeded in their attempt to get inside you, your body is now a five star rat hotel.");
+        }
     }
 
     public void Shop(Player player, NameLists nameList, List<Fighter> fighters)
@@ -66,15 +74,13 @@
         int streak = 0;
         foreach (Fighter f in fighters)
         {
-            if (!f.GetAlive())
+            if (!f.GetAlive()) //how many fighters are dead
             {
                 streak++;
             }
         }
 
-        int aTo = player.weapon.name.IndexOf(" ");
-        string possibleLegendary = player.weapon.name.Substring(0, aTo);
-        if (streak >= requiredStreak && possibleLegendary != "Legendary")
+        if (streak >= requiredStreak && player.weapon.quality != "Legendary")
         {
             int legenWeaponPrice = 50;
             string legenWeaponName = nameList.GetWeaponTypeName();
@@ -111,10 +117,10 @@
                 {
                     if (buyableWeapons.Count < player.weapon.qualityNames.Count)
                     {
-                        buyableWeapons.Add(new Weapon());
+                        buyableWeapons.Add(new Weapon()); //create temporary weapon to showcase
                         buyableWeapons[i].SetName(nameList.GetWeaponTypeName(), i);
                     }
-                    buyableWeaponsPrices[i] = generator.Next(buyableWeaponsPrices[i] - priceRange, buyableWeaponsPrices[i] + priceRange + 1);
+                    buyableWeaponsPrices[i] = generator.Next(WeaponsPrices[i] - priceRange, WeaponsPrices[i] + priceRange + 1);
                     Console.WriteLine($"{i + 1}: {buyableWeapons[i].name} - [{buyableWeaponsPrices[i]} gold]");
                 }
 
@@ -123,10 +129,10 @@
                 {
                     if (buyableArmour.Count < player.weapon.qualityNames.Count)
                     {
-                        buyableArmour.Add(new Armour());
+                        buyableArmour.Add(new Armour()); //create temporary armour to showcase
                         buyableArmour[i].SetName(generator.Next(buyableArmour[i].types.Count), generator.Next(buyableArmour[i].materialNames.Count), i);
                     }
-                    buyableArmourPrices[i] = generator.Next(buyableArmourPrices[i] - priceRange, buyableArmourPrices[i] + priceRange + 1);
+                    buyableArmourPrices[i] = generator.Next(ArmourPrices[i] - priceRange, ArmourPrices[i] + priceRange + 1);
                     Console.WriteLine($"{i + buyableWeapons.Count + 1}: {buyableArmour[i].name} - [{buyableArmourPrices[i]} gold]");
                 }
                 Console.WriteLine("\n[or \"Leave\"]");
@@ -134,13 +140,13 @@
                 int.TryParse(userInput, out int index);
                 int wIndex = 0;
                 int aIndex = 0;
-                if (index <= 4)
+                if (index <= buyableWeapons.Count) //make index for weapon
                 {
                     wIndex = index;
                 }
-                else if (index <= 8)
+                else if (index <= buyableArmour.Count + buyableWeapons.Count) //make index for armour so not out of range when using the index with list
                 {
-                    aIndex = index - buyableArmourPrices.Count;
+                    aIndex = index - buyableArmourPrices.Length;
                 }
 
                 bool bought = false;
@@ -167,7 +173,7 @@
                     {
                         string oldWeapon = player.weapon.name;
                         player.weapon.SetName(buyableWeapons[wIndex - 1].type, wIndex - 1);
-                        buyableWeapons.Clear();
+                        buyableWeapons.Clear(); //clear after purchase to restock next time
 
                         Console.WriteLine($"You bought a {player.weapon.name}, sold your {oldWeapon} and left the Blacksmiths Shop.");
 
@@ -175,30 +181,30 @@
                     }
                     else if (bought && aIndex != 0)
                     {
-                        int abc = 0;
+                        int typePos = 0;
                         if (buyableArmour[aIndex - 1].type == buyableArmour[aIndex - 1].types[0])
                         {
-                            abc = 0;
+                            typePos = 0;
                         }
                         else if (buyableArmour[aIndex - 1].type == buyableArmour[aIndex - 1].types[1])
                         {
-                            abc = 1;
+                            typePos = 1;
                         }
                         else if (buyableArmour[aIndex - 1].type == buyableArmour[aIndex - 1].types[2])
                         {
-                            abc = 2;
+                            typePos = 2;
                         }
 
-                        string oldArmour = player.armours[abc].name;
+                        string oldArmour = player.armours[typePos].name;
                         player.AddArmour(buyableArmour[aIndex - 1]);
-                        buyableArmour.Clear();
+                        buyableArmour.Clear(); //clear after purchase to restock next time
                         if (oldArmour == null)
                         {
-                            Console.WriteLine($"You bought a {player.armours[abc].name} and left the Blacksmiths Shop.");
+                            Console.WriteLine($"You bought a {player.armours[typePos].name} and left the Blacksmiths Shop.");
                         }
                         else
                         {
-                            Console.WriteLine($"You bought a {player.armours[abc].name}, sold your {oldArmour} and left the Blacksmiths Shop.");
+                            Console.WriteLine($"You bought a {player.armours[typePos].name}, sold your {oldArmour} and left the Blacksmiths Shop.");
                         }
 
                         acceptedAnswer = true;
@@ -223,12 +229,11 @@
 
     public void Arena(Player player, NameLists nameList, List<Fighter> fighters)
     {
-        // fighters.RemoveAll(f => !f.GetAlive());
         existingEnemies.Clear();
         bool fightersExist = false;
         for (int i = 0; i < fighters.Count; i++)
         {
-            if (fighters[i].GetAlive() && fighters[i] is Fighter)
+            if (fighters[i].GetAlive() && fighters[i] is not Player)
             {
                 fightersExist = true;
                 existingEnemies.Add(i);
@@ -249,18 +254,18 @@
             int index = generator.Next(existingEnemies.Count);
             currentEnemy = existingEnemies[index];
             Console.Write($"Your opponent is {fighters[currentEnemy].name} who wields a {fighters[currentEnemy].weapon.name} and wears");
-            if (fighters[currentEnemy].HasArmour())
+            if (fighters[currentEnemy].HasArmour())  //write correct grammar
             {
                 for (int i = 0; i < fighters[currentEnemy].armours.Length; i++)
                 {
                     if (fighters[currentEnemy].armours[i].exists)
                     {
-                        if (i != 0)
+                        if (i != 0) //as long as it is not he first armour being written
                         {
-                            if (fighters[currentEnemy].armours[0].exists)
+                            if (fighters[currentEnemy].armours[0].exists || fighters[currentEnemy].armours[1].exists)
                             {
                                 int howMany = 0;
-                                foreach (Armour a in fighters[currentEnemy].armours)
+                                foreach (Armour a in fighters[currentEnemy].armours) //check how many armour pieces in total they are wearing 
                                 {
                                     if (a.exists)
                                     {
@@ -268,9 +273,16 @@
                                     }
                                 }
 
-                                if (howMany == 2)
+                                if (howMany == 2) //if only wearing two, write "and" between them
                                 {
-                                    Console.Write(" and");
+                                    if (fighters[currentEnemy].armours[0].exists) //if doesn't matter which armour (out of the two last) the "and" is put before because 0 exists
+                                    {
+                                        Console.Write(" and");
+                                    }
+                                    else if (fighters[currentEnemy].armours[1].exists && i == 2) //if 1 exists and is 2
+                                    {
+                                        Console.Write(" and");
+                                    }
                                 }
                                 else if (howMany == 3)
                                 {
@@ -294,7 +306,7 @@
             {
                 Console.Write(" no armour");
             }
-            Console.WriteLine(".");
+            Console.WriteLine("."); //end with .
         }
 
         while (!acceptedAnswer)
@@ -313,7 +325,7 @@
                     if (i == currentEnemy || fighters[i] is Player)
                     {
                         fighters[i].PrintStats();
-                        fighters[i].SetArmourValues();
+                        fighters[i].SetArmourValues(); //make sure armour values are up to date
                     }
                 }
                 Console.WriteLine("");
@@ -397,7 +409,7 @@
         int enemyWeaponQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
         fighters[currentEnemy].weapon.SetName(nameList.GetWeaponTypeName(), enemyWeaponQuality);
         int enemyArmourQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
-        int enemyArmourMaterial = generator.Next(fighters[currentEnemy].weapon.materialNames.Count);
+        int enemyArmourMaterial = generator.Next(fighters[currentEnemy].armours[0].materialNames.Count);
 
         for (int i = 0; i < fighters[currentEnemy].armours.Length; i++)
         {

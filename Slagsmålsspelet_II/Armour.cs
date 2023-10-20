@@ -1,11 +1,13 @@
 ﻿public class Armour: Gear
 {
     public List<string> types = new() {"Leggings", "Chestplate", "Helmet"};
+    string material;
+    public List<string> materialNames = new() {"Leather", "Bronze", "Iron", "Steel", "Mithril"};
     public bool exists = false;
     public int armourValue;
     public int dodgeValue;
 
-    public string SetName(int typeIndex, int materialIndex, int qualityIndex)
+    public string SetName(int typeIndex, int materialIndex, int qualityIndex) //Set name and stats
     {
         type = types[typeIndex];
         material = materialNames[materialIndex];
@@ -16,7 +18,7 @@
         return name;
     }
 
-    void SetBaseStats()
+    void SetBaseStats() //stats depending on shit
     {
         exists = true;
 
@@ -103,8 +105,3 @@
         }
     }
 }
-
-
-
-// add light armour that increases dodge and heavy armour that just is strong
-// Chestpiece, Leggings, Helmet

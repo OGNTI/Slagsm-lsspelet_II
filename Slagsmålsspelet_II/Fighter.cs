@@ -16,7 +16,7 @@ public class Fighter
     Random generator = new Random();
 
 
-    public void Name(string nameInput)
+    public void Name(string nameInput) //Name fighter, can be userInput or not
     {
         if (nameInput == "") 
         {
@@ -40,7 +40,7 @@ public class Fighter
         alive = true;
     }
 
-    public void LightAttack(Fighter target, NameLists nameList)
+    public void LightAttack(Fighter target, NameLists nameList) //Light attack, regular damage, blocked does no damage, regular dodge chance
     {
         if (target.blocking)
         {
@@ -61,11 +61,11 @@ public class Fighter
             else
             {
                 int damage = 0;
-                int damageBA = weapon.GetDamage(nameList);
+                int damageBA = weapon.GetDamage(nameList); //damage Before Armour
                 if (target.HasArmour())
                 {
                     float damageReduction = target.totalArmour / 100;
-                    float damageAA = damageBA - damageBA * damageReduction;
+                    float damageAA = damageBA - damageBA * damageReduction; //damage After Armour
                     damage = (int)damageAA;
                 }
                 else
@@ -78,10 +78,10 @@ public class Fighter
         }
     }
 
-    public void HeavyAttack(Fighter target, NameLists nameList)
+    public void HeavyAttack(Fighter target, NameLists nameList) // Heavy attack, double damage, blocked does regular damage, twice as easy to dodge, easier to miss
     {
         int damage = 0;
-        int damageBA = weapon.GetDamage(nameList);
+        int damageBA = weapon.GetDamage(nameList); //damage Before Armour
         int miss = generator.Next(4);
         int dodge = generator.Next(90);
 
@@ -99,7 +99,7 @@ public class Fighter
             if (target.HasArmour())
             {
                 float damageReduction = target.totalArmour / 100;
-                float damageAA = damageBA - damageBA * damageReduction;
+                float damageAA = damageBA - damageBA * damageReduction; //damage After Armour
                 damage = (int)damageAA;
             }
             else
@@ -147,7 +147,7 @@ public class Fighter
         return alive;
     }
 
-    public void AddArmour(Armour newArmour)
+    public void AddArmour(Armour newArmour) //find new armours type and replace that slot with new
     {
         if (newArmour.type == newArmour.types[0])
         {

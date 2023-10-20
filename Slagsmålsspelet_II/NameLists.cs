@@ -5,7 +5,7 @@
     Random generator = new();
 
 
-    public string GetPersonName()
+    public string GetPersonName() //random person name
     {
         int index = generator.Next(personNames.Count);
         string name = personNames[index];
@@ -13,7 +13,7 @@
         return name;
     }
 
-    public string GetWeaponTypeName()
+    public string GetWeaponTypeName() //random weapon type
     {
         int index = generator.Next(weaponTypeNames.Count);
         string name = weaponTypeNames[index];
