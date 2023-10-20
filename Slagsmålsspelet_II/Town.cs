@@ -21,7 +21,7 @@
     {
         int innCost = generator.Next(baseInnCost - baseInnCostRange, baseInnCost + baseInnCostRange + 1);
         Console.WriteLine($"You wish to rest at the Inn to regain your health. \nInnkeeper tells you it will cost {innCost} gold for a night, \ndo you still wish to rest? [yes/no]");
-        string userInput = Console.ReadLine().ToLower();
+        string userInput = Console.ReadLine().ToLower().Trim();
         if (userInput == "yes" || userInput == "y")
         {
             if (player.gold >= innCost)
@@ -135,8 +135,8 @@
                     buyableArmourPrices[i] = generator.Next(ArmourPrices[i] - priceRange, ArmourPrices[i] + priceRange + 1);
                     Console.WriteLine($"{i + buyableWeapons.Count + 1}: {buyableArmour[i].name} - [{buyableArmourPrices[i]} gold]");
                 }
-                Console.WriteLine("\n[or \"Leave\"]");
-                string userInput = Console.ReadLine().ToLower();
+                Console.WriteLine("\n[or \"Leave with Enter\"]");
+                string userInput = Console.ReadLine().ToLower().Trim();
                 int.TryParse(userInput, out int index);
                 int wIndex = 0;
                 int aIndex = 0;
@@ -214,14 +214,10 @@
                         Console.WriteLine("You do not have enough gold to buy that. \n ");
                     }
                 }
-                else if (userInput == "leave")
+                else
                 {
                     Console.WriteLine("You left the Blacksmiths Shop.");
                     acceptedAnswer = true;
-                }
-                else
-                {
-                    Console.WriteLine("That was not an option.");
                 }
             }
         }
@@ -309,42 +305,51 @@
             Console.WriteLine("."); //end with .
         }
 
-        while (!acceptedAnswer)
+        Console.WriteLine("Do you wish to fight? [yes/no]");
+        string userInput = Console.ReadLine().ToLower().Trim();
+
+        if (userInput == "yes" || userInput == "y")
         {
-            Console.WriteLine("Do you wish to fight? [yes/no]");
-            string userInput = Console.ReadLine().ToLower();
+            Console.WriteLine("You accept the fight and head out to the fighting pit.");
+            fight = true;
 
-            if (userInput == "yes" || userInput == "y")
+            for (int i = 0; i < fighters.Count; i++)
             {
-                Console.WriteLine("You accept the fight and head out to the fighting pit.");
-                fight = true;
-                acceptedAnswer = true;
-
-                for (int i = 0; i < fighters.Count; i++)
+                if (i == currentEnemy || fighters[i] is Player)
                 {
-                    if (i == currentEnemy || fighters[i] is Player)
-                    {
-                        fighters[i].PrintStats();
-                        fighters[i].SetArmourValues(); //make sure armour values are up to date
-                    }
+                    fighters[i].PrintStats();
+                    fighters[i].SetArmourValues(); //make sure armour values are up to date
                 }
-                Console.WriteLine("");
             }
-            else if (userInput == "no" || userInput == "n")
-            {
-                Console.WriteLine("You changed your mind and went back to the Town.");
-                fight = false;
-                acceptedAnswer = true;
-            }
+            Console.WriteLine("");
         }
+        else
+        {
+            Console.WriteLine("You changed your mind and went back to the Town.");
+            fight = false;
+        }
+
 
         while (player.GetAlive() && fighters[currentEnemy].GetAlive() && fight)
         {
             Console.WriteLine("Light Attack, Heavy Attack or Block? [L/H/B]");
-            string userAction = Console.ReadLine().ToLower();
+            string userAction = Console.ReadLine().ToLower().Trim();
             int enemyaction = generator.Next(3);
-            Console.WriteLine("");
 
+            while (!acceptedAnswer)
+            {
+                if (userAction == "block" || userAction == "b" || userAction == "light" || userAction == "l" || userAction == "heavy" || userAction == "h")
+                {
+                    acceptedAnswer = true;
+                }
+                else
+                {
+                    Console.WriteLine("That was not an option.");
+                    userAction = Console.ReadLine().ToLower().Trim();
+                }
+            }
+
+            Console.WriteLine("");
             if (userAction == "block" || userAction == "b")
             {
                 player.Block();
