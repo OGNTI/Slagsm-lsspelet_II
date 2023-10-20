@@ -65,7 +65,8 @@ public class Fighter
                 if (target.HasArmour())
                 {
                     float damageReduction = target.totalArmour / 100;
-                    float damageAA = damageBA - damageBA * damageReduction; //damage After Armour
+                    float damageAA = damageBA;
+                    damageAA -= damageBA * damageReduction; //damage After Armour
                     damage = (int)damageAA;
                 }
                 else
@@ -99,7 +100,8 @@ public class Fighter
             if (target.HasArmour())
             {
                 float damageReduction = target.totalArmour / 100;
-                float damageAA = damageBA - damageBA * damageReduction; //damage After Armour
+                float damageAA = damageBA;
+                damageAA -= damageBA * damageReduction; //damage After Armour
                 damage = (int)damageAA;
             }
             else
@@ -178,21 +180,19 @@ public class Fighter
 
     public void SetArmourValues()
     {
-        if (HasArmour())
+        totalArmour = 0;
+        totalDodge = 0;
+        foreach (Armour a in armours)
         {
-
-            foreach (Armour a in armours)
+            if (a.name == null)
             {
-                if (a.name == null)
-                {
-                    totalArmour += 0;
-                    totalDodge += noArmourDodge;
-                }
-                else
-                {
-                    totalArmour += a.armourValue;
-                    totalDodge += a.dodgeValue;
-                }
+                totalArmour += 0;
+                totalDodge += noArmourDodge;
+            }
+            else
+            {
+                totalArmour += a.armourValue;
+                totalDodge += a.dodgeValue;
             }
         }
     }
