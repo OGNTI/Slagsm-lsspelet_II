@@ -3,7 +3,6 @@ Town town = new();
 List<Fighter> fighters = new();
 bool singlePlayer = true;
 bool gaming;
-Random generator = new Random();
 
 
 bool acceptedAnswer = false;

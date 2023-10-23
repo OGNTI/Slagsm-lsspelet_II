@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-public class Fighter
+﻿public class Fighter
 {
     public string name = "Errorson";
     public int maxHp = 100;
