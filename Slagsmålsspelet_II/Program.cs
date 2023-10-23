@@ -41,7 +41,7 @@ if (singlePlayer)
             player.currentHp = player.maxHp;
         }
 
-        Console.WriteLine($"You are in the Town, You have {player.gold} gold and {player.currentHp}/{player.maxHp} Hp. \nWhat do you wish to do? \n \nRest at the Inn [1/rest] \nSleep on the street [2/sleep] \nVisit the Blacksmiths Shop [3/shop] \nFight in the Arena [4/fight] \nCheck your Backpack [5/inventory]");
+        Console.WriteLine($"You are in the Town, You are level {player.level}, have {player.gold} gold and {player.currentHp}/{player.maxHp} Hp. \nWhat do you wish to do? \n \nRest at the Inn [1/rest] \nSleep on the street [2/sleep] \nVisit the Blacksmiths Shop [3/shop] \nFight in the Arena [4/fight] \nCheck your Backpack [5/inventory]");
         string userInput = Console.ReadLine().ToLower().Trim();
 
         if (userInput == "1" || userInput == "rest")

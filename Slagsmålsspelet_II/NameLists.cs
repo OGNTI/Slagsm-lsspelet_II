@@ -1,6 +1,6 @@
 ﻿public class NameLists
 {
-    List<string> personNames = new() { "Bob", "Steve", "Greg", "Flavia", "Quintis", "Tiberius", "Bjornulf", "Glenn" };
+    List<string> personNames = new() { "Bob", "Steve", "Greg", "Flavia", "Quintis", "Tiberius", "Bjornulf", "Glenn", "Maximus", "Leonidas", "Attilius", "Marcus", "Spiculus", "Tigris", "Licinius"};
     List<string> weaponTypeNames = new() { "Spatha", "Axe", "Spear", "Dagger", "Hammer", "Gladius", "Trident", "Javelin", "Crossbow", "Greatsword" };
     Random generator = new();
 

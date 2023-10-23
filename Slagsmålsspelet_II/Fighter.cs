@@ -2,11 +2,14 @@
 {
     public string name = "Errorson";
     public int maxHp = 100;
-    public int currentHp = 100;
+    public int currentHp;
+    public int strength = 0;
     public Weapon weapon = new();
     public Armour[] armours = { new Armour(), new Armour(), new Armour() }; //can only have 3 Armours, Legs Chest Head
     public int totalArmour;
     public int totalDodge;
+    public int level = 0;
+    public int givenXP;
     public bool blocking = false;
     public int noArmourDodge = 10;
     bool alive;
@@ -36,6 +39,7 @@
             name = char.ToUpper(name[0]) + name.Substring(1); //Capitalize first letter then add rest of string
         }
         alive = true;
+        currentHp = maxHp;
     }
 
     public void LightAttack(Fighter target, NameLists nameList) //Light attack, regular damage, blocked does no damage, regular dodge chance
@@ -59,7 +63,7 @@
             else
             {
                 int damage = 0;
-                int damageBA = weapon.GetDamage(nameList); //damage Before Armour
+                int damageBA = weapon.GetDamage(nameList) + strength; //damage Before Armour
                 if (target.HasArmour())
                 {
                     float damageReduction = target.totalArmour / 100;
@@ -77,10 +81,10 @@
         }
     }
 
-    public void HeavyAttack(Fighter target, NameLists nameList) // Heavy attack, double damage, blocked does regular damage, twice as easy to dodge, easier to miss
+    public void HeavyAttack(Fighter target, NameLists nameList) // Heavy attack, more damage, blocked does regular damage, twice as easy to dodge, easier to miss
     {
         int damage = 0;
-        int damageBA = weapon.GetDamage(nameList); //damage Before Armour
+        int damageBA = weapon.GetDamage(nameList) + strength; //damage Before Armour
         int miss = generator.Next(4);
         int dodge = generator.Next(90);
 
@@ -114,8 +118,9 @@
             }
             else 
             {
-                target.currentHp -= damage * 2;
-                Console.WriteLine($"{name} heavy attacked {target.name}. [DMG: {damage * 2}]");
+                float heavyDamage = damage * 1.5f;
+                target.currentHp -= (int)heavyDamage;
+                Console.WriteLine($"{name} heavy attacked {target.name}. [DMG: {(int)heavyDamage}]");
             }
         }
     }
@@ -193,5 +198,12 @@
                 totalDodge += a.dodgeValue;
             }
         }
+    }
+
+    public int GivenXp()
+    {
+        givenXP = level * 2;
+
+        return givenXP;
     }
 }

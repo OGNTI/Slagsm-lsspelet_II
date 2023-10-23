@@ -121,7 +121,7 @@
                         buyableWeapons[i].SetName(nameList.GetWeaponTypeName(), i);
                     }
                     buyableWeaponsPrices[i] = generator.Next(WeaponsPrices[i] - priceRange, WeaponsPrices[i] + priceRange + 1);
-                    Console.WriteLine($"{i + 1}: {buyableWeapons[i].name} - [{buyableWeaponsPrices[i]} gold]");
+                    Console.WriteLine($"{i + 1}: {buyableWeapons[i].name} ({buyableWeapons[i].GetStats()} Base Damage) - [{buyableWeaponsPrices[i]} gold]");
                 }
 
                 Console.WriteLine(" \nArmour:");
@@ -133,7 +133,7 @@
                         buyableArmour[i].SetName(generator.Next(buyableArmour[i].types.Count), generator.Next(buyableArmour[i].materialNames.Count), i);
                     }
                     buyableArmourPrices[i] = generator.Next(ArmourPrices[i] - priceRange, ArmourPrices[i] + priceRange + 1);
-                    Console.WriteLine($"{i + buyableWeapons.Count + 1}: {buyableArmour[i].name} - [{buyableArmourPrices[i]} gold]");
+                    Console.WriteLine($"{i + buyableWeapons.Count + 1}: {buyableArmour[i].name} ({buyableArmour[i].armourValue} Armour, {buyableArmour[i].dodgeValue} Dodge) - [{buyableArmourPrices[i]} gold]");
                 }
                 Console.WriteLine("\n[or \"Leave with Enter\"]");
                 string userInput = Console.ReadLine().ToLower().Trim();
@@ -249,7 +249,7 @@
         {
             int index = generator.Next(existingEnemies.Count);
             currentEnemy = existingEnemies[index];
-            Console.Write($"Your opponent is {fighters[currentEnemy].name} who wields a {fighters[currentEnemy].weapon.name} and wears");
+            Console.Write($"Your opponent is {fighters[currentEnemy].name} who is level {fighters[currentEnemy].level} and wields a {fighters[currentEnemy].weapon.name} and wears");
             if (fighters[currentEnemy].HasArmour())  //write correct grammar
             {
                 for (int i = 0; i < fighters[currentEnemy].armours.Length; i++)
@@ -402,6 +402,7 @@
                 int winnings = generator.Next(baseWinnings - baseWinningsRange, baseWinnings + baseWinningsRange + 1);
                 Console.WriteLine($"{fighters[currentEnemy].name} was slain by {player.name}. \nYou won {winnings} gold.");
                 player.gold += winnings;
+                player.GainXP(fighters[currentEnemy].GivenXp());
             }
         }
     }
@@ -410,6 +411,9 @@
     {
         fighters.Add(new Fighter());
         currentEnemy = fighters.Count - 1;
+        fighters[currentEnemy].level = generator.Next(1, 10+1);
+        fighters[currentEnemy].maxHp += fighters[currentEnemy].level * 5;
+        fighters[currentEnemy].strength = fighters[currentEnemy].level;
         fighters[currentEnemy].Name(nameList.GetPersonName());
         int enemyWeaponQuality = generator.Next(fighters[currentEnemy].weapon.qualityNames.Count);
         fighters[currentEnemy].weapon.SetName(nameList.GetWeaponTypeName(), enemyWeaponQuality);
