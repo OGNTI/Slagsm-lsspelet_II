@@ -1,6 +1,6 @@
 ﻿public class Armour: Gear
 {
-    public List<string> types = new() {"Leggings", "Chestplate", "Helmet"};
+    public string[] types = {"Leggings", "Chestplate", "Helmet"};
     string material;
     public List<string> materialNames = new() {"Leather", "Bronze", "Iron", "Steel", "Mithril"};
     public bool exists = false;

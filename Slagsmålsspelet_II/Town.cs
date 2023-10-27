@@ -130,7 +130,7 @@
                     if (buyableArmour.Count < player.weapon.qualityNames.Count)
                     {
                         buyableArmour.Add(new Armour()); //create temporary armour to showcase
-                        buyableArmour[i].SetName(generator.Next(buyableArmour[i].types.Count), generator.Next(buyableArmour[i].materialNames.Count), i);
+                        buyableArmour[i].SetName(generator.Next(buyableArmour[i].types.Length), generator.Next(buyableArmour[i].materialNames.Count), i);
                     }
                     buyableArmourPrices[i] = generator.Next(ArmourPrices[i] - priceRange, ArmourPrices[i] + priceRange + 1);
                     Console.WriteLine($"{i + buyableWeapons.Count + 1}: {buyableArmour[i].name} ({buyableArmour[i].armourValue} Armour, {buyableArmour[i].dodgeValue} Dodge) - [{buyableArmourPrices[i]} gold]");
